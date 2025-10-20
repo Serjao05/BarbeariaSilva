@@ -1,6 +1,6 @@
 namespace BarbeariaSilva.Models
 {
-    public class ErrorViewModel
+    public class SobreViewModel
     {
         public string? RequestId { get; set; }
 

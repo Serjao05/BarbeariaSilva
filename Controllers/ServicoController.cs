@@ -4,11 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BarbeariaSilva.Controllers
 {
-    public class HomeController : Controller
+    public class ServicoController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<ServicoController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public ServicoController(ILogger<ServicoController> logger)
         {
             _logger = logger;
         }

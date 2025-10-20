@@ -1,6 +1,6 @@
 namespace BarbeariaSilva.Models
 {
-    public class ErrorViewModel
+    public class ClubeViewModel
     {
         public string? RequestId { get; set; }
 

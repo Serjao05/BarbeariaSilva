@@ -1,6 +1,36 @@
 ﻿
+<body>
 
-<div class="Container 1">
-    <div class="logoInicio"></div>
-   <img src="~/img/LogoInicio.png" width="500" height="500">
-</div>
+    <div class="Container1">
+        <div class="LogoInicio">
+        <img src="~/img/LogoInicio.png" width="500" height="500">
+        </div>
+        <form>
+            <row>
+                <div >
+                    <input class="UsuarioInicio"  type="text" id="Nome" name="Nome" required />
+                </div>
+            </row>
+            <row>
+                <div>
+                    <input class="SenhaInicio" type="password" id="Senha" name="Senha" required />
+                </div>
+            </row>
+            <row>
+                <div class="LoginInicio">
+                    <button type="submit" class="EnviarInicio">Login</button>
+                </div>
+            </row>
+
+            <h2> ______________ OU ______________ </h2>
+
+            <row>
+                <div class="col-12"> ESQUECEU A SENHA?</div>
+            </row>
+
+            <row>
+                <div class="col-12"> NÃO TEM CONTA?<a href="/Home/Cadastro">CADASTRE-SE</a></div>
+            </row>
+        </form>
+    </div>
+</body>

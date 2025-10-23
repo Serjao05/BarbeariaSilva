@@ -18,6 +18,13 @@ namespace BarbeariaSilva.Controllers
             return View();
         }
 
+        [HttpGet]
+
+        public IActionResult Cadastro()
+        {
+            return View("~/Views/Home/Cadastro.cshtml");
+        }
+
         public IActionResult Privacy()
         {
             return View();

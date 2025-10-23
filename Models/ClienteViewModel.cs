@@ -1,0 +1,18 @@
+namespace BarbeariaSilva.Models
+{
+    public class ClienteViewModel
+    {
+        public int? id_cliente { get; set; }
+        public string? nome { get; set; }  
+        
+        public string? email { get; set; }
+
+        public string? telefone { get; set; }
+        public string? senha { get; set; }
+
+        public string? data_cadastro { get; set; }
+
+
+
+    }
+}

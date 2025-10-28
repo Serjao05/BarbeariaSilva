@@ -4,5 +4,5 @@
 // Write your JavaScript code.
 
 function Cadastro() {
-    window.location.href = "/Home/Cadastro";
+    window.location.href = '/Home/Cadastro';
 }

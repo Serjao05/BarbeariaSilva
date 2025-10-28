@@ -1,0 +1,38 @@
+﻿
+<body>
+
+    <div class="Container1">
+        <div class="LogoInicio">
+        <img src="~/img/LogoInicio.png" width="500" height="500">
+        </div>
+        <form>
+            <row>
+                <div >
+                    <input class="col-4"  type="text" id="Nome" name="Nome" required />
+                </div>
+            </row>
+            <row>
+                <div>
+                    <input class="col-4" type="password" id="Senha" name="Senha" required />
+                </div>
+            </row>
+            <row>
+                <div class="col-.6">
+                    <button type="submit" class="EnviarInicio">Login</button>
+                </div>
+            </row>
+
+            <h2> ______________ OU ______________ </h2>
+
+            <row>
+                <div class="col-12"> ESQUECEU A SENHA?</div>
+            </row>
+
+            <row>
+                <p>NÃO TEM CONTA?</p>
+                <button onclick="CadastroCliente()">Cadastre-se como Cliente </button>
+                <button onclick="CadastroBarbeiro()">Cadastre-se como Barbeiro </button>
+            </row>
+        </form>
+    </div>
+</body>

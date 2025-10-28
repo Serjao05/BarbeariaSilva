@@ -1,6 +1,6 @@
 namespace BarbeariaSilva.Models
 {
-    public class ServicoViewModel
+    public class PagamentoViewModel
     {
         public string? RequestId { get; set; }
 

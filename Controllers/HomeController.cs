@@ -19,10 +19,15 @@ namespace BarbeariaSilva.Controllers
         }
 
         [HttpGet]
-
-        public IActionResult Cadastro()
+        public IActionResult CadastroCliente()
         {
-            return View("~/Views/Home/Cadastro.cshtml");
+            return View("~/Views/Cliente/Cadastro.cshtml");
+        }
+
+        [HttpGet]
+        public IActionResult CadastroBarbeiro()
+        {
+            return View("~/Views/Barbeiro/Cadastro.cshtml");
         }
 
         public IActionResult Privacy()

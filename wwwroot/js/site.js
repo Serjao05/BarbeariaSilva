@@ -3,6 +3,10 @@
 
 // Write your JavaScript code.
 
-function Cadastro() {
-    window.location.href = '/Home/Cadastro';
+function CadastroCliente() {
+    window.location.href = '/Home/CadastroCliente';
+}
+
+function CadastroBarbeiro() {
+    window.location.href = '/Home/CadastroBarbeiro';
 }

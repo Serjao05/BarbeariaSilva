@@ -2,8 +2,17 @@ namespace BarbeariaSilva.Models
 {
     public class AgendarViewModel
     {
-        public string? RequestId { get; set; }
+        public int? id_agendamento { get; set; }
 
-        public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
+        public string? data { get; set; }
+
+        public int? id_barbeiro { get; set; }
+
+        public int? id_cliente { get; set; }
+
+        public int? id_servico { get; set; }
+        
+        public string? status { get; set; }
+
     }
 }

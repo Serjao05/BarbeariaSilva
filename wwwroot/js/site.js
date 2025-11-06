@@ -10,3 +10,7 @@ function CadastroCliente() {
 function CadastroBarbeiro() {
     window.location.href = '/Home/CadastroBarbeiro';
 }
+
+function Agendar() {
+    window.location.href = '/Home/Agendar';
+}

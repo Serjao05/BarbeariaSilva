@@ -31,28 +31,34 @@ namespace BarbeariaSilva.Controllers
 
         public IActionResult CadastroCliente(ClienteViewModel model)
         {
+            string teste = "chegou";
             if (ModelState.IsValid)
             {
                 try
                 {
-                    model.Id = Guid.NewGuid();
+                    
 
                     string senhaCriptografada = BCrypt.Net.BCrypt.HashPassword(model.Senha);
 
                     var connectionString = Environment.GetEnvironmentVariable("DefaultConnection");
 
                     const string query = @"
-                INSERT INTO cliente (id, nome, email, senha)
-                VALUES (@id, @nome, @email, @senha);
+                INSERT INTO cliente (id_cliente, nome, email, senha)
+                VALUES (@id_cliente, @nome, @email, @senha);
                     ";
 
                     using (var connection = new NpgsqlConnection(connectionString))
                     {
                         connection.Open();
 
+                        using (var cmd = new NpgsqlCommand("SELECT COALESCE(MAX(id_cliente), 0) + 1 FROM cliente", connection))
+                        {
+                            model.Id = Convert.ToInt32(cmd.ExecuteScalar());
+                        }
+
                         using (var cmd = new NpgsqlCommand(query, connection))
                         {
-                            cmd.Parameters.AddWithValue("id", model.Id);
+                            cmd.Parameters.AddWithValue("id_cliente", model.Id);
                             cmd.Parameters.AddWithValue("nome", model.Nome ?? string.Empty);
                             cmd.Parameters.AddWithValue("email", model.Email ?? string.Empty);
                             cmd.Parameters.AddWithValue("senha", senhaCriptografada ?? string.Empty);
@@ -63,9 +69,9 @@ namespace BarbeariaSilva.Controllers
                     return View("~/Views/Home/Login.cshtml");
                 }
                 catch (Exception ex) {
-                    Console.WriteLine($"Erro ao registrar o Cliente: {ex.Message}");
+                    Console.WriteLine($"Erro ao cadastrar o Cliente: {ex.Message}");
 
-                    ModelState.AddModelError(string.Empty, "Ocorreu um erro ao registraro Cliente. Tente Novamente.");
+                    ModelState.AddModelError(string.Empty, "Ocorreu um erro ao cadastrar Cliente. Tente Novamente.");
                 }
             }
 
@@ -86,24 +92,30 @@ namespace BarbeariaSilva.Controllers
             {
                 try
                 {
-                    model.Id = Guid.NewGuid();
+                   
 
                     string senhaCriptografada = BCrypt.Net.BCrypt.HashPassword(model.Senha);
 
                     var connectionString = Environment.GetEnvironmentVariable("DefaultConnection");
 
                     const string query = @"
-                INSERT INTO barbeiro (id, nome, email, senha)
-                VALUES (@id, @nome, @email, @senha);
+                INSERT INTO barbeiro (id_barbeiro, nome, email, senha)
+                VALUES (@id_barbeiro, @nome, @email, @senha);
                     ";
 
                     using (var connection = new NpgsqlConnection(connectionString))
                     {
                         connection.Open();
 
+
+                        using (var cmd = new NpgsqlCommand("SELECT COALESCE(MAX(id_barbeiro), 0) + 1 FROM barbeiro", connection))
+                        {
+                            model.Id = Convert.ToInt32(cmd.ExecuteScalar());
+                        }
+
                         using (var cmd = new NpgsqlCommand(query, connection))
                         {
-                            cmd.Parameters.AddWithValue("id", model.Id);
+                            cmd.Parameters.AddWithValue("id_barbeiro", model.Id);
                             cmd.Parameters.AddWithValue("nome", model.Nome ?? string.Empty);
                             cmd.Parameters.AddWithValue("email", model.Email ?? string.Empty);
                             cmd.Parameters.AddWithValue("senha", senhaCriptografada ?? string.Empty);

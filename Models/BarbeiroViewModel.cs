@@ -8,7 +8,7 @@ namespace BarbeariaSilva.Models
 {
     public class BarbeiroViewModel  
     {
-        public Guid Id { get; set; }
+        public int? Id { get; set; }
 
         [Required(ErrorMessage = "O Nome é obrigatório.")]
         [StringLength(100, ErrorMessage = "O Nome não pode exceder 100 caracteres.")]
@@ -26,10 +26,6 @@ namespace BarbeariaSilva.Models
 
         public string? Senha { get; set; }
 
-        [Compare("senha", ErrorMessage = "As senhas não coincidem.")]   
-        [DataType(DataType.Password)]
-
-        public string? confirmar_senha { get; set; }
 
 
 

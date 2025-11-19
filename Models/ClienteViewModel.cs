@@ -9,7 +9,7 @@ namespace BarbeariaSilva.Models
     public class ClienteViewModel
     {
 
-        public Guid Id { get; set; }
+        public int? Id { get; set; }
 
 
         [Required(ErrorMessage = "O Nome é obrigatório.")]
@@ -28,10 +28,6 @@ namespace BarbeariaSilva.Models
 
         public string? Senha { get; set; }
 
-        [Compare("senha", ErrorMessage = "As senhas não coincidem.")]
-        [DataType(DataType.Password)]
-
-        public string? confirmar_senha { get; set; }
 
 
 

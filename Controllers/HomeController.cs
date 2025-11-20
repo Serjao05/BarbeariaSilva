@@ -21,6 +21,8 @@ namespace BarbeariaSilva.Controllers
             return View();
         }
 
+
+
         [HttpGet]
         public IActionResult CadastroCliente()
         {
@@ -31,12 +33,12 @@ namespace BarbeariaSilva.Controllers
 
         public IActionResult CadastroCliente(ClienteViewModel model)
         {
-            string teste = "chegou";
+
             if (ModelState.IsValid)
             {
                 try
                 {
-                    
+
 
                     string senhaCriptografada = BCrypt.Net.BCrypt.HashPassword(model.Senha);
 
@@ -68,7 +70,8 @@ namespace BarbeariaSilva.Controllers
 
                     return View("~/Views/Home/Login.cshtml");
                 }
-                catch (Exception ex) {
+                catch (Exception ex)
+                {
                     Console.WriteLine($"Erro ao cadastrar o Cliente: {ex.Message}");
 
                     ModelState.AddModelError(string.Empty, "Ocorreu um erro ao cadastrar Cliente. Tente Novamente.");
@@ -92,7 +95,7 @@ namespace BarbeariaSilva.Controllers
             {
                 try
                 {
-                   
+
 
                     string senhaCriptografada = BCrypt.Net.BCrypt.HashPassword(model.Senha);
 
@@ -136,7 +139,75 @@ namespace BarbeariaSilva.Controllers
             return Error();
         }
 
+        [HttpPost]
 
+        public IActionResult Login(ClienteViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+
+                try
+                {
+                    var connectionString = Environment.GetEnvironmentVariable("DefaultConnection");
+
+                    const string query = @"
+                SELECT id, nome, email, telefone, senha
+                FROM cliente
+                WHERE email = @email
+                LIMIT 1;
+                ";
+
+                    using (var connection = new NpgsqlConnection(connectionString))
+                    {
+                        connection.Open();
+
+                        using (var cmd = new NpgsqlCommand(query, connection))
+                        {
+                            cmd.Parameters.AddWithValue("email", model.Email ?? string.Empty);
+
+                            using (var reader = cmd.ExecuteReader())
+                            {
+                                if (reader.Read())
+                                {
+                                    string senhaHash = reader["senha"].ToString();
+
+                                    bool senhaCorreta = BCrypt.Net.BCrypt.Verify(model.Senha, senhaHash);
+
+                                    if (senhaCorreta)
+                                    {
+                                        return View("~/Views/Home/Index.cshtml");
+                                    }
+
+                                    else
+                                    {
+                                        ModelState.AddModelError(string.Empty, "senha incorreta.");
+                                    }
+                                }
+                                else
+                                {
+                                    ModelState.AddModelError(string.Empty, "Usuário não encontrado.");
+                                }
+                            }
+                        }
+                    }
+
+                }
+                
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Erro ao fazer login: {ex.Message}");
+                    ModelState.AddModelError(string.Empty, "Ocorreu um erro ao fazer login. Tente novamente.");
+                }
+            }
+            return Error();
+        }
+
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
         public IActionResult Privacy()
         {
             return View();
@@ -155,10 +226,10 @@ namespace BarbeariaSilva.Controllers
         }
 
         [HttpPost]
-        public IActionResult Agendar(AgendarViewModel model) 
+        public IActionResult Agendar(AgendarViewModel model)
         {
             return View(model);
         }
-        
+
     }
 }

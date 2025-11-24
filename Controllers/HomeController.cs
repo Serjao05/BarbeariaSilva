@@ -21,6 +21,59 @@ namespace BarbeariaSilva.Controllers
             return View();
         }
 
+        
+        [HttpPost]
+
+        public IActionResult agendamento(AgendarViewModel model)
+        {
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+
+                    var connectionString = Environment.GetEnvironmentVariable("DefaultConnection");
+
+                    const string query = @"
+                INSERT INTO agendamento (id_agendamento, data, id_barbeiro, id_cliente, id_servico, status, nome)
+                VALUES (@id_agendamento, @data, @id_barbeiro, @id_cliente, @id_servico, @status, @nome);
+                    ";
+
+                    using (var connection = new NpgsqlConnection(connectionString))
+                    {
+                        connection.Open();
+
+                        using (var cmd = new NpgsqlCommand("SELECT COALESCE(MAX(id_agendamento), 0) + 1 FROM agendamento", connection))
+                        {
+                            model.id_agendamento = Convert.ToInt32(cmd.ExecuteScalar());
+                        }
+
+                        using (var cmd = new NpgsqlCommand(query, connection))
+                        {
+                            cmd.Parameters.AddWithValue("id_agendamento", model.id_agendamento);
+                            cmd.Parameters.AddWithValue("data", model.data);
+                            cmd.Parameters.AddWithValue("id_barbeiro", model.id_barbeiro );
+                            cmd.Parameters.AddWithValue("id_cliente", model.id_cliente);
+                            cmd.Parameters.AddWithValue("id_servico", model.id_servico);
+                            cmd.Parameters.AddWithValue("status", model.status ?? string.Empty);
+                            cmd.Parameters.AddWithValue("nome", model.nome ?? string.Empty);
+
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+
+                    return View("~/Views/Home/Home.cshtml");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Erro ao Agendar o Horario: {ex.Message}");
+
+                    ModelState.AddModelError(string.Empty, "Ocorreu um erro ao Agendar o Horario. Tente Novamente.");
+                }
+            }
+
+            return View("~/Views/Home/Home.cshtml");
+        }
 
 
         [HttpGet]
@@ -78,7 +131,7 @@ namespace BarbeariaSilva.Controllers
                 }
             }
 
-            return Error();
+            return View("~/Views/Home/Login.cshtml");
         }
 
         [HttpGet]
@@ -136,7 +189,7 @@ namespace BarbeariaSilva.Controllers
                 }
             }
 
-            return Error();
+            return View("~/Views/Home/Login.cshtml");
         }
 
         [HttpPost]
@@ -169,19 +222,22 @@ namespace BarbeariaSilva.Controllers
                             {
                                 if (reader.Read())
                                 {
-                                    string senhaHash = reader["senha"].ToString();
-
-                                    bool senhaCorreta = BCrypt.Net.BCrypt.Verify(model.Senha, senhaHash);
-
-                                    if (senhaCorreta)
+                                    if (model.Senha != null)
                                     {
-                                        return View("~/Views/Home/Index.cshtml");
+                                        string senhaHash = reader["senha"].ToString();
+                                        bool senhaCorreta = BCrypt.Net.BCrypt.Verify(model.Senha, senhaHash);
+
+                                        if (senhaCorreta)
+                                        {
+                                            return View("~/Views/Home/Index.cshtml");
+                                        }
+
+                                        else
+                                        {
+                                            ModelState.AddModelError(string.Empty, "senha incorreta.");
+                                        }
                                     }
 
-                                    else
-                                    {
-                                        ModelState.AddModelError(string.Empty, "senha incorreta.");
-                                    }
                                 }
                                 else
                                 {
@@ -192,14 +248,15 @@ namespace BarbeariaSilva.Controllers
                     }
 
                 }
-                
+
                 catch (Exception ex)
                 {
                     Console.WriteLine($"Erro ao fazer login: {ex.Message}");
                     ModelState.AddModelError(string.Empty, "Ocorreu um erro ao fazer login. Tente novamente.");
                 }
             }
-            return Error();
+            return View("~/Views/Home/Login.cshtml");
+
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -219,11 +276,6 @@ namespace BarbeariaSilva.Controllers
             return View("~/Views/Agendamento/Cadastro.cshtml");
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
 
         [HttpPost]
         public IActionResult Agendar(AgendarViewModel model)

@@ -4,7 +4,9 @@ namespace BarbeariaSilva.Models
     {
         public int? id_agendamento { get; set; }
 
-        public string? data { get; set; }
+        public DateTime? data { get; set; }
+
+        public string? nome { get; set; }
 
         public int? id_barbeiro { get; set; }
 

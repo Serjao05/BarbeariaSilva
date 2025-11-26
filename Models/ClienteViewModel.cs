@@ -23,12 +23,13 @@ namespace BarbeariaSilva.Models
         public string? Email { get; set; }
 
         [Required(ErrorMessage = "A senha é obrigatória.")]
-        [MinLength(6, ErrorMessage = "A senha deve ter no mínimo 6 caracteres.")]
         [DataType(DataType.Password)]
 
         public string? Senha { get; set; }
+        public string? Telefone { get; set; }
+        public DateTime? Data { get; set; }
 
-
+  
 
 
     }

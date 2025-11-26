@@ -21,7 +21,12 @@ namespace BarbeariaSilva.Controllers
             return View();
         }
 
-        
+        [HttpGet]
+        public IActionResult Agendar()
+        {
+            return View("~/Views/Agendamento/Cadastro.cshtml");
+        }
+
         [HttpPost]
 
         public IActionResult agendamento(AgendarViewModel model)
@@ -53,7 +58,7 @@ namespace BarbeariaSilva.Controllers
                             cmd.Parameters.AddWithValue("id_agendamento", model.id_agendamento);
                             cmd.Parameters.AddWithValue("data", model.data);
                             cmd.Parameters.AddWithValue("id_barbeiro", model.id_barbeiro );
-                            cmd.Parameters.AddWithValue("id_cliente", model.id_cliente);
+                            cmd.Parameters.AddWithValue("id_cliente", 0);
                             cmd.Parameters.AddWithValue("id_servico", model.id_servico);
                             cmd.Parameters.AddWithValue("status", model.status ?? string.Empty);
                             cmd.Parameters.AddWithValue("nome", model.nome ?? string.Empty);
@@ -71,6 +76,7 @@ namespace BarbeariaSilva.Controllers
                     ModelState.AddModelError(string.Empty, "Ocorreu um erro ao Agendar o Horario. Tente Novamente.");
                 }
             }
+
 
             return View("~/Views/Home/Home.cshtml");
         }
@@ -98,8 +104,8 @@ namespace BarbeariaSilva.Controllers
                     var connectionString = Environment.GetEnvironmentVariable("DefaultConnection");
 
                     const string query = @"
-                INSERT INTO cliente (id_cliente, nome, email, senha)
-                VALUES (@id_cliente, @nome, @email, @senha);
+                INSERT INTO cliente (id_cliente, nome, email, telefone, senha, data_cadastro)
+                VALUES (@id_cliente, @nome, @email, @telefone, @senha, @data_cadastro);
                     ";
 
                     using (var connection = new NpgsqlConnection(connectionString))
@@ -116,7 +122,9 @@ namespace BarbeariaSilva.Controllers
                             cmd.Parameters.AddWithValue("id_cliente", model.Id);
                             cmd.Parameters.AddWithValue("nome", model.Nome ?? string.Empty);
                             cmd.Parameters.AddWithValue("email", model.Email ?? string.Empty);
+                            cmd.Parameters.AddWithValue("telefone", model.Telefone ?? string.Empty);
                             cmd.Parameters.AddWithValue("senha", senhaCriptografada ?? string.Empty);
+                            cmd.Parameters.AddWithValue("data_cadastro", DateTime.Now);
                             cmd.ExecuteNonQuery();
                         }
                     }
@@ -131,7 +139,7 @@ namespace BarbeariaSilva.Controllers
                 }
             }
 
-            return View("~/Views/Home/Login.cshtml");
+            return View("~/Views/Cliente/Cadastro.cshtml");
         }
 
         [HttpGet]
@@ -204,9 +212,9 @@ namespace BarbeariaSilva.Controllers
                     var connectionString = Environment.GetEnvironmentVariable("DefaultConnection");
 
                     const string query = @"
-                SELECT id, nome, email, telefone, senha
+                SELECT id_cliente, nome, email, telefone, senha, data_cadastro
                 FROM cliente
-                WHERE email = @email
+                WHERE nome = @nome
                 LIMIT 1;
                 ";
 
@@ -216,7 +224,7 @@ namespace BarbeariaSilva.Controllers
 
                         using (var cmd = new NpgsqlCommand(query, connection))
                         {
-                            cmd.Parameters.AddWithValue("email", model.Email ?? string.Empty);
+                            cmd.Parameters.AddWithValue("nome", model.Nome ?? string.Empty);
 
                             using (var reader = cmd.ExecuteReader())
                             {
@@ -229,7 +237,7 @@ namespace BarbeariaSilva.Controllers
 
                                         if (senhaCorreta)
                                         {
-                                            return View("~/Views/Home/Index.cshtml");
+                                            return View("~/Views/Home/Home.cshtml");
                                         }
 
                                         else
@@ -269,19 +277,7 @@ namespace BarbeariaSilva.Controllers
         {
             return View();
         }
-
-        [HttpGet]
-        public IActionResult Agendar()
-        {
-            return View("~/Views/Agendamento/Cadastro.cshtml");
-        }
-
-
-        [HttpPost]
-        public IActionResult Agendar(AgendarViewModel model)
-        {
-            return View(model);
-        }
-
+            
+             
     }
 }

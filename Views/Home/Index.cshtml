@@ -1,26 +1,39 @@
-﻿@model BarbeariaSilva.Models.AgendarViewModel
+﻿@model BarbeariaSilva.Models.ClienteViewModel
 
-@{
-    ViewData["Title"] = "Agedar Horario";
+<body>
 
-}
+    <div class="Container1">
+        <div class="LogoInicio">
+            <img src="~/img/LogoInicio.png" width="500" height="500">
+        </div>
+        <form asp-controller="Home" asp-action="Login" method="post">
+            <row>
+                <div>
+                    <input class="col-4" type="text" asp-for="Nome" name="Nome" required />
+                </div>
+            </row>
+            <row>
+                <div>
+                    <input class="col-4" type="password" asp-for="Senha" name="Senha" required />
+                </div>
+            </row>
+            <row>
+                <div class="col-.6">
+                    <button type="submit" class="EnviarInicio">Login</button>
+                </div>
+            </row>
 
-<h2>Agendar Horario</h2>
+            <h2> ______________ OU ______________ </h2>
 
-<form asp-controller="Home" asp-action="agendamento" method="post" novalidate>
-    
-    <div class="form-group">
-        <label asp-for="nome"></label>
-        <input asp-for="nome" class="form-control" />
-        <span asp-validation-for="nome" class="text-danger"></span>
+            <row>
+                <div class="col-12"> ESQUECEU A SENHA?</div>
+            </row>
+
+            <row>
+                <p>NÃO TEM CONTA?</p>
+                <button onclick="CadastroCliente()">Cadastre-se como Cliente </button>
+                <button onclick="CadastroBarbeiro()">Cadastre-se como Barbeiro </button>
+            </row>
+        </form>
     </div>
-    <div class="form-group">
-        <label asp-for="data"></label>
-        <input type="datetime-local" asp-for="data" class="form-control" />
-        <span asp-validation-for="data" class="text-danger"></span>
-    </div>
-   
-
-    
-    <button type="submit" class="btn btn-primary">Agendar Horario</button>
-</form> 
+</body>

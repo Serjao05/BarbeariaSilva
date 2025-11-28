@@ -1,6 +1,6 @@
 html {
   font-size: 14px;
-}
+ }
 
 @media (min-width: 768px) {
   html {
@@ -18,10 +18,14 @@ html {
 }
 
 body {
-    margin-bottom: 60px;
-    background-color: #5D5A56;
+    background: linear-gradient(rgba(30, 30, 30, 0.3), rgba(30, 30, 30, 0.3)), url('../img/img_4339.jpg') no-repeat center;
     display: flex;
+    background-size: cover;
+    background-attachment: fixed;
+    width:100vw;
+    height:100vh;
 }
+
 
 * {
     padding: 0;
